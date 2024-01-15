@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import "./SignUp.scss";
 import { Link as RouterLink } from "react-router-dom";
 import Logo from "../assets/logo.png";
 import Avatar from "@mui/material/Avatar";
@@ -17,6 +18,8 @@ import Select from "@mui/material/Select";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const defaultTheme = createTheme();
@@ -28,7 +31,7 @@ const mobileRegex = /^\d{10,15}$/;
 export default function SignUp() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
-  const [profession,setProfession]= useState("");
+  const [profession, setProfession] = useState("");
   const [howDidYouHear, setHowDidYouHear] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -39,6 +42,11 @@ export default function SignUp() {
   const [emailError, setEmailError] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [mobileError, setMobileError] = useState("");
+
+  const formatDate = (date) => {
+    const options = { year: "numeric", month: "numeric", day: "numeric" };
+    return new Date(date).toLocaleDateString(undefined, options);
+  };
 
   const validateEmail = () => {
     setEmailError(emailRegex.test(email) ? "" : "Invalid email address");
@@ -88,15 +96,16 @@ export default function SignUp() {
         <CssBaseline />
         <Box
           sx={{
-            marginTop: 8,
+            // marginTop: 8,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
+            backgroundColor: "antiquewhite",
           }}
         >
           {/* <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}> */}
-            {/* <LockOutlinedIcon /> */}
-            <img src={Logo} style={{width:"10%"}}></img>
+          {/* <LockOutlinedIcon /> */}
+          <img src={Logo} style={{ width: "10%" }}></img>
           {/* </Avatar> */}
           <Typography component="h1" variant="h5">
             Sign up
@@ -160,29 +169,30 @@ export default function SignUp() {
                   onChange={(e) => setProfession(e.target.value)}
                 />
               </Grid>
-         
-        <Grid item xs={12}>
-          <FormControl fullWidth required>
-            <InputLabel id="how-did-you-hear-label">How did you hear about us?</InputLabel>
-            <Select
-              labelId="how-did-you-hear-label"
-              id="how-did-you-hear"
-              value={howDidYouHear}
-              name="howDidYouHear"
-              label="How did you hear about us?"
-              autoComplete="How did you hear about us?"
 
-              onChange={(e) => setHowDidYouHear(e.target.value)}
-            >
-              <MenuItem value="Instagram">Instagram</MenuItem>
-              <MenuItem value="Facebook">Facebook</MenuItem>
-              <MenuItem value="CourseProvider">Course Provider</MenuItem>
-              <MenuItem value="Google">Google</MenuItem>
-              <MenuItem value="Referral">Referral</MenuItem>
-              <MenuItem value="Other">Other</MenuItem>
-            </Select>
-          </FormControl>
-        </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth required>
+                  <InputLabel id="how-did-you-hear-label">
+                    How did you hear about us?
+                  </InputLabel>
+                  <Select
+                    labelId="how-did-you-hear-label"
+                    id="how-did-you-hear"
+                    value={howDidYouHear}
+                    name="howDidYouHear"
+                    label="How did you hear about us?"
+                    autoComplete="How did you hear about us?"
+                    onChange={(e) => setHowDidYouHear(e.target.value)}
+                  >
+                    <MenuItem value="Instagram">Instagram</MenuItem>
+                    <MenuItem value="Facebook">Facebook</MenuItem>
+                    <MenuItem value="CourseProvider">Course Provider</MenuItem>
+                    <MenuItem value="Google">Google</MenuItem>
+                    <MenuItem value="Referral">Referral</MenuItem>
+                    <MenuItem value="Other">Other</MenuItem>
+                  </Select>
+                </FormControl>
+              </Grid>
               <Grid item xs={12}>
                 <TextField
                   required
@@ -214,19 +224,37 @@ export default function SignUp() {
                   helperText={mobileError}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  required
-                  fullWidth
-                  name="birthday"
-                  label="BirthDay"
-                  type="date"
-                  id="birthday"
-                  autoComplete="birthday"
-                  value={birthday}
-                  onChange={(e) => setBirthday(e.target.value)}
+
+              <Grid container item xs={12}>
+                <DatePicker
+                  selected={birthday}
+                  onChange={(date) => setBirthday(date)}
+                  peekNextMonth
+                  showMonthDropdown
+                  showYearDropdown
+                  dropdownMode="select"
+                  dateFormat="dd/MM/yyyy"
+                  placeholderText="Select a date"
+                  customInput={
+                    <TextField
+                      required
+                      fullWidth
+                      id="birthday"
+                      label="Birthday *"
+                      name="birthday"
+                      InputProps={{
+                        readOnly: true,
+                      }}
+                      // error={Boolean(!birthday)}
+                      // helperText={
+                      //   Boolean(!birthday) ? "Please select a date" : ""
+                      // }
+                    />
+                  }
+                  style={{ width: '100%', important: 'true' }}
                 />
               </Grid>
+
               {/* <Grid item xs={12}>
                 <TextField
                   required
